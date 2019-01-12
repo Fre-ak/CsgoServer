@@ -14,8 +14,7 @@ sudo dpkg --add-architecture i386; sudo apt update; sudo apt install mailutils p
 ## 下载本体并安装
 
 ```bash
-mkdir csgo && cd csgo
-wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh csgoserver
+mkdir csgo && cd csgo &&  wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh csgoserver
 ./csgoserver install
 ```
 
