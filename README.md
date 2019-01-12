@@ -53,12 +53,12 @@ wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm
 >
         csgo/serverfiles/csgo/cfg/csgoserver.cfg
         csgo/lgsm/config-lgsm/csgoserver
-        插件配置可能存在于多个地方
+        插件配置可能存在于多个位置
 
 ## 数据库
 
 数据库的主要作用是保存数据, 比如地图数据与玩家数据等.
-数据库分为关系型和非关系型, 其中非关系型又分为 键值型(redis, ssdb) 文档型(mongodb) 搜索型(es), 而关系型数据库却大同小异, 一般来说timer只支持 sqllite和mysql
+数据库分为关系型和非关系型, 其中非关系型又分为 键值型(redis, ssdb) 文档型(mongodb) 搜索型(es), 而关系型数据库却大同小异, 一般来说timer只支持 sqllite和*mysql*
 
 ### 安装**mysql**
 
@@ -116,3 +116,13 @@ DEMO:
 + 没有linux基础的上手起来可能十分困难
 + 有些细节没有介绍, 需要各位自己摸索
 + 有问题的可以给我提**issue**, 但是问题描述尽量详细
+
+## 我的服务器
+
+```bash
+47.107.173.171:27015    # 128tick btimer 广州
+119.29.102.65:27015    # 100tick btimer 深圳or广州
+118.25.224.90:27015    # 64tick surftimer 成都
+```
+
+欢迎各位来玩
