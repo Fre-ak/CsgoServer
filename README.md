@@ -81,7 +81,7 @@ DEMO:
         "timer"
         {
                 "drive"                         "default"
-                "host"                          "/var/run/mysqld/mysqld.sock"
+                "host"                          "localhost / 数据库ip"
                 "database"                      "csgo"
                 "user"                          "xxx"
                 "pass"                          "xxx"
