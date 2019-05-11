@@ -1,28 +1,59 @@
-# 怎样搭建一个csgo服务器
+# 如何搭建一个csgo服务器
 
 > 本文将引导你如何在linux上搭建一个属于自己的csgo服务器, 所以会假定你拥有基本的linux知识.
-由于linux的发型版众多, 这里主要介绍ubuntu 16.04 LTS 64bit下的教程.
 
 ## 环境配置
 
+Ubuntu 64-bit
 ```bash
 sudo dpkg --add-architecture i386; sudo apt update; sudo apt install mailutils postfix curl wget file bzip2 gzip unzip bsdmainutils python util-linux ca-certificates binutils bc jq tmux lib32gcc1 libstdc++6 libstdc++6:i386
 ```
+Ubuntu 32-bit
+```bash
+sudo apt install mailutils postfix curl wget file bzip2 gzip unzip bsdmainutils python util-linux ca-certificates binutils bc jq tmux libstdc++6
+```
+Debian 64-bit
+```bash
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install mailutils postfix curl wget file bzip2 gzip unzip bsdmainutils python util-linux ca-certificates binutils bc jq tmux lib32gcc1 libstdc++6 libstdc++6:i386
+```
+Debian 32-bit
+```bash
+sudo apt install mailutils postfix curl wget file bzip2 gzip unzip bsdmainutils python util-linux ca-certificates binutils bc jq tmux libstdc++6
+```
 
-其他发行版 ( *Debian, Fedora, CentOS* ) 请看 [linuxGSM](https://linuxgsm.com/lgsm/csgoserver/)
+Fedora 64-bit
+```bash
+sudo apt install mailutils postfix curl wget file bzip2 gzip unzip bsdmainutils python util-linux ca-certificates binutils bc jq tmux libstdc++6
+```
 
-## 下载本体并安装
+Fedora 32-bit
+```bash
+dnf install mailx postfix curl wget file bzip2 gzip unzip python binutils bc jq tmux libstdc++
+```
+
+CentOS 64-bit
+```bash
+yum install epel-release && yum install mailx postfix curl wget bzip2 gzip unzip python binutils bc jq tmux glibc.i686 libstdc++ libstdc++.i686
+```
+
+CentOS 32-bit
+```bash
+yum install epel-release && yum install mailx postfix curl wget bzip2 gzip unzip python binutils bc jq tmux libstdc++
+```
+
+## 下载服务端并安装
 
 ```bash
 mkdir csgo && cd csgo &&  wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh csgoserver
 ./csgoserver install
 ```
+>如果是想搭建除了 **csgo** 以外的服务器, 只需把csgoserver替换成其他的即可 如:cssserver(cs起源) gmodserver(盖瑞模组) 更多可在[**此处查看**](https://linuxgsm.com/lgsm/) 为了更方便管理服务器, 建议把 **csgo** 替换成相应的字符
 
 这里应该会出现进度条, 等他慢慢安装完成
 
 ## 服务器管理
 
-进入csgo文件夹
+进入刚刚创建的文件夹, 接下来都是以csgo为例.
 
 ```bash
 ./csgoserver start   #运行服务器
@@ -33,7 +64,7 @@ mkdir csgo && cd csgo &&  wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x li
 
 ## 加入插件
 
-首先要下载sourcemod和metamod, 其他插件都是基于这两个开发的
+首先要下载sourcemod和metamod, 我们所使用的插件都是基于这两个平台的
 
 ```bash
 ./csgoserver mods-install #安装插件
@@ -41,7 +72,7 @@ mkdir csgo && cd csgo &&  wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x li
 
 然后在交互模式中选择 *sourcemod* 或者 *metamod* 安装
 
-此外我们还要安装其他的插件, 如 *btimer cksurf influx* 等, 只需要把插件上传上去解压, 然后复制覆盖掉对应的文件夹即可
+如果我们需要安装其他的插件, 只需要把插件上传上去解压, 然后复制覆盖掉对应的文件夹即可
 
 ## 配置
 
@@ -50,14 +81,15 @@ mkdir csgo && cd csgo &&  wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x li
 分别的路径为:
 
 >
-        csgo/serverfiles/csgo/cfg/csgoserver.cfg
-        csgo/lgsm/config-lgsm/csgoserver
-        插件配置可能存在于多个位置
+        csgo/serverfiles/csgo/cfg/csgoserver.cfg #服务器参数配置
+        csgo/lgsm/config-lgsm/csgoserver #lgsm配置
+        csgo/serverfiles/csgo/addons/sourcemod/configs #插件配置 1
+        csgo/serverfiles/csgo/cfg/ #插件配置 2(取决于插件)
 
 ## 数据库
 
 数据库的主要作用是保存数据, 比如地图数据与玩家数据等.
-数据库分为关系型和非关系型, 其中非关系型又分为 键值型(redis, ssdb) 文档型(mongodb) 搜索型(es), 而关系型数据库却大同小异, 一般来说timer只支持 sqllite和*mysql*
+数据库分为关系型和非关系型, 其中非关系型又分为 键值型(redis, ssdb) 文档型(mongodb) 搜索型(es), 而关系型数据库却大同小异, 目前的 **sourcemod** 插件只支持 *mysql* 以及 *sqlite*
 
 ### 安装**mysql**
 
@@ -67,25 +99,25 @@ sudo apt install mysql-server
 
 安装完成后会出现弹窗设置root密码
 
-### 创建csgo数据库
+### 创建数据库
 
 ```bash
 mysql -uroot -p密码
 create database csgo charset=utf8mb4
 ```
 
-然后根据timer要求, 在 *csgo/serverfiles/csgo/addons/sourcemod/configs/databases.cfg* 这个文件中加入数据库信息
+然后根据 **插件的数据库配置需求** 进行配置, 在 *csgo/serverfiles/csgo/addons/sourcemod/configs/databases.cfg* 该文件中加入数据库信息
 
 DEMO:
 >
-        "timer"
+        "数据库接口名称"
         {
-                "drive"                         "default"
-                "host"                          "localhost / 数据库ip"
-                "database"                      "csgo"
-                "user"                          "xxx"
-                "pass"                          "xxx"
-                "port"                          "3306"
+                "drive"                         "mysql / sqlite"
+                "host"                          "localhost(本地) / 数据库ip / 服务器域名 / 接口文件路径"
+                "database"                      "刚刚创建的数据库名"
+                "user"                          "用户名"
+                "pass"                          "密码"
+                "port"                          "3306" //可选
         }
 
 ## 其他
